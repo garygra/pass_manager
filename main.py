@@ -50,6 +50,8 @@ class Main_window(QDialog):
 
 		# self.btn_login = QPushButton("btn_login")
 		self.ui.btn_login.clicked.connect(self.btn_login_clicked)
+		self.ui.btn_new_user.clicked.connect(self.btn_new_user_clicked)
+
 	def btn_login_clicked(self, parent):
 		file, user_passwd = df.user_login(str(self.ui.txt_user.text()), str(self.ui.txt_passwd.text()))
 		if file == None:
@@ -64,6 +66,9 @@ class Main_window(QDialog):
 			self.logged_in_w.fill_services()
 			self.logged_in_w.show()
 			self.hide()
+
+		def btn_new_user_clicked(self, parent):
+			
 
 if __name__ == "__main__":
 	app = QApplication(sys.argv)

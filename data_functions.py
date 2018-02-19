@@ -118,7 +118,6 @@ def get_username_and_passwd(user_file, srv_index, cipher):
 	username = decrypt_fn(cipher, line_username)
 	passwd = decrypt_fn(cipher, line_passwd)
 
-
 	return username, passwd
 
 
