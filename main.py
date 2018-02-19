@@ -9,6 +9,13 @@ from PyQt4 import QtCore
 # from main_ui import Ui_Form
 import main_ui as main_gui
 import logged_in_ui as logged_in_gui
+import new_user_ui as new_user_gui
+
+class new_user_window(QDialog):
+	def __init__(self, parent = None):
+		QWidget.__init__(self, parent)
+		self.ui = new_user_gui.Ui_Form()
+		self.ui.setupUi(self)
 
 class logged_in_window(QDialog):
 	user_file = ""
@@ -67,7 +74,9 @@ class Main_window(QDialog):
 			self.logged_in_w.show()
 			self.hide()
 
-		def btn_new_user_clicked(self, parent):
+	def btn_new_user_clicked(self, parent):
+		self.new_user_w = new_user_window(self) 
+		self.new_user_w.show()
 			
 
 if __name__ == "__main__":
