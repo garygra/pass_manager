@@ -4,6 +4,7 @@ import inspect
 import codecs
 import linecache
 import os
+import random
 from Crypto.Cipher import AES
 
 
@@ -80,11 +81,13 @@ def get_user_services(user_file, cipher):
 			break;
 		line = line_aux[0]
 		if debbug:
+			print_current_fn()
 			print line
 		line_num += 4	
 
 		service = decrypt_fn(cipher, line)
 		services_list.append(service)
+	linecache.clearcache()
 	return services_list
 
 def create_cypher_fn(key):
@@ -108,9 +111,25 @@ def decrypt_fn(cipher, data):
 		print "serv:", serv
 	return serv
 
+def encrypt_fn(cipher, data):
+	# data_dec = codecs.escape_decode(data)[0]
+	if debbug:
+		print_current_fn()
+	# 	print "data:", data
+	# 	print "data len:", len(data)
+	# 	print "data_dec:", data_dec
+	aux = ">" * (32 - len(data))
+	enc_data = cipher.encrypt(data + aux) # AES decrypt
+	
+	if debbug:
+		print "data", data
+		print "enc_data:", enc_data
+		# print "serv:", serv
+	return codecs.escape_encode(enc_data)[0]
+
 def get_username_and_passwd(user_file, srv_index, cipher):
-	line_username = linecache.getline(user_file, 2 + 4 * srv_index).splitlines()[0] #.split(",")
-	line_passwd = linecache.getline(user_file, 3 + 4 * srv_index).splitlines()[0] #.split(",")
+	line_username = linecache.getline(user_file, 3 + 4 * srv_index).splitlines()[0] #.split(",")
+	line_passwd = linecache.getline(user_file, 4 + 4 * srv_index).splitlines()[0] #.split(",")
 	if debbug:
 		print_current_fn()
 		print "srv_index:", srv_index
@@ -118,7 +137,7 @@ def get_username_and_passwd(user_file, srv_index, cipher):
 		print "line_passwd:", line_passwd
 	username = decrypt_fn(cipher, line_username)
 	passwd = decrypt_fn(cipher, line_passwd)
-
+	linecache.clearcache()
 	return username, passwd
 
 def user_name_exist(username):
@@ -209,6 +228,55 @@ def delete_user(username):
 	# 			break
 	# 		line = f.readline()
 
+def gen_new_passwd():
+	chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%&*()-;:.,[]"
+	new_passwd = ""
+	for x in xrange(0, 32):
+		new_passwd += chars[random.randint(0, len(chars)-1)]
+	return new_passwd
+
+def service_exist(user_file, cipher, service_to_check):
+	if debbug:
+		print_current_fn()
+		print "user_file",user_file
+		# print "user_passwd", user_passwd
+
+	# services_list = []
+	exists = False
+	line_num = 2
+
+	while(True):
+		line_aux = linecache.getline(user_file, line_num).splitlines()
+		if not line_aux:
+			break;
+		line = line_aux[0]
+		if debbug:
+			print line
+		line_num += 4	
+
+		service = decrypt_fn(cipher, line)
+		if service == service_to_check:
+			exists = True
+			break
+		# services_list.append(service)
+	linecache.clearcache()
+	return exists
+
+def add_new_service(user_file, cipher, new_srv, new_user, new_passwd):
+	file = open(user_file, "r")
+	linelist = file.readlines()
+	file.close()
+
+	num_new_srv = int(linelist[-4].split(",")[0]) + 1
+	srv_enc = encrypt_fn(cipher, new_srv)
+	username_enc = encrypt_fn(cipher, new_user)
+	passwd_enc = encrypt_fn(cipher, new_passwd)
+
+	new_line = "\n" + str(num_new_srv) + "\n" + srv_enc + "\n" + username_enc + "\n" + passwd_enc
+	
+	file_append = open(user_file, 'a')
+	file_append.write(new_line)
+	file_append.close()
 
 def dummy():
 	print "Dummy function called :)"

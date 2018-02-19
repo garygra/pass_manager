@@ -11,12 +11,13 @@ import main_ui as main_gui
 import logged_in_ui as logged_in_gui
 import new_user_ui as new_user_gui
 import delete_user_ui as del_user_gui
-import new_srv_ui as new_srv_gui
+import add_service_ui as add_service_gui
 
-class new_service_window(QDialog):
+
+class add_service_window(QDialog):
 	def __init__(self, parent = None):
 		QWidget.__init__(self, parent)
-		self.ui = new_srv_gui.Ui_Form()
+		self.ui = add_service_gui.Ui_Form()
 		self.ui.setupUi(self)
 
 class del_user_window(QDialog):
@@ -101,22 +102,25 @@ class logged_in_window(QDialog):
 		self.ui = logged_in_gui.Ui_Form()
 		self.ui.setupUi(self)
 		self.ui.btn_show.clicked.connect(self.btn_show_clicked)
-		self.ui.btn_new.clicked.connect(self.btn_new_clicked)
-		
+		self.ui.btn_add_new_service.released.connect(self.btn_add_new_service)
+		self.ui.txt_new_service.hide()
+		self.ui.lbl_title_new_srv.hide()
+		self.ui.btn_save_new_service.setEnabled(False)
+		self.ui.btn_cancel_new_service.hide()
+		self.ui.btn_cancel_new_service.clicked.connect(self.btn_cancel_new_service_clicked)
+		self.ui.btn_gen_passwd.clicked.connect(self.btn_gen_passwd_clicked)
+		self.ui.btn_gen_passwd.hide()
+		self.ui.btn_save_new_service.clicked.connect(self.btn_save_new_service_clicked)
+		self.ui.lbl_new_srv_error.hide()
+		# self.ui.btn_erase.clicked.connect(self)
+
 	def create_user_cipher(self):
 		self.cipher = df.create_cypher_fn(self.user_passwd)
 
 	def fill_services(self):
 		services = df.get_user_services(self.user_file, self.cipher)
-
 		self.ui.cbox_service.clear()
 		self.ui.cbox_service.addItems(services)
-
-	def btn_new_clicked(self):
-		print "btn_clicked"
-		# self.new_srv_w = new_service_window(self) 
-		# self.new_srv_w.show()
-		
 
 	def btn_show_clicked(self, parent):
 		srv_index = self.ui.cbox_service.currentIndex() 
@@ -124,9 +128,73 @@ class logged_in_window(QDialog):
 		self.ui.txt_username.setText(username_srv_index)
 		self.ui.txt_passwd.setText(passwd_srv_index)
 
-		# print passwd_srv_index
+	def btn_add_new_service(self):
+		print "btn clicked"
+		self.ui.cbox_service.hide()
+		self.ui.txt_new_service.show()
+		self.ui.txt_new_service.setEnabled(True)
+		self.ui.txt_new_service.setText("")
+		self.ui.txt_username.setEnabled(True)
+		self.ui.txt_username.setText("")
+		self.ui.txt_passwd.setEnabled(True)
+		self.ui.txt_passwd.setText("")
+		self.ui.lbl_title_new_srv.show()
+		self.ui.lbl_title.hide()
+		self.ui.btn_save_new_service.setEnabled(True)
+		self.ui.btn_cancel_new_service.show()
+		self.ui.btn_add_new_service.hide()
+		self.ui.btn_gen_passwd.show()
+		self.ui.lbl_new_srv_error.hide()
+		
 
 
+	def btn_cancel_new_service_clicked(self, parent):
+		self.ui.cbox_service.show()
+		self.ui.txt_new_service.hide()
+		self.ui.txt_new_service.setEnabled(False)
+		self.ui.txt_username.setEnabled(False)
+		self.ui.txt_passwd.setEnabled(False)
+		self.ui.lbl_title_new_srv.hide()
+		self.ui.lbl_title.show()
+		self.ui.btn_save_new_service.setEnabled(False)
+		self.ui.btn_cancel_new_service.hide()
+		self.ui.btn_add_new_service.show()
+		self.ui.btn_gen_passwd.hide()
+		self.ui.lbl_new_srv_error.hide()
+
+	def btn_gen_passwd_clicked(self, parent):
+		new_pass = df.gen_new_passwd()
+		print len(new_pass)
+		self.ui.txt_passwd.setText(new_pass)	
+
+	def btn_save_new_service_clicked(self, parent):
+		new_srv = str(self.ui.txt_new_service.text())
+		new_username = str(self.ui.txt_username.text())
+		new_passwd = str(self.ui.txt_passwd.text())
+
+		if len(new_srv) >= 2 and df.service_exist(self.user_file, self.cipher, new_srv):
+			self.ui.lbl_new_srv_error.show()
+		else: 
+			if len(new_passwd) > 10:
+				df.add_new_service(self.user_file, self.cipher, new_srv, new_username, new_passwd)
+				self.ui.cbox_service.show()
+				self.ui.txt_new_service.hide()
+				self.ui.txt_new_service.setEnabled(False)
+				self.ui.txt_username.setEnabled(False)
+				self.ui.txt_passwd.setEnabled(False)
+				self.ui.lbl_title_new_srv.hide()
+				self.ui.lbl_title.show()
+				self.ui.btn_save_new_service.setEnabled(False)
+				self.ui.btn_cancel_new_service.hide()
+				self.ui.btn_add_new_service.show()
+				self.ui.btn_gen_passwd.hide()
+				self.ui.lbl_new_srv_error.hide()
+				self.ui.txt_passwd.setText("")
+				self.ui.txt_username.setText("")
+				services = df.get_user_services(self.user_file, self.cipher)
+				self.ui.cbox_service.clear()
+				self.ui.cbox_service.addItems(services)
+		
 class Main_window(QDialog):
 	def __init__(self, parent = None):
 		QWidget.__init__(self, parent)
@@ -147,7 +215,6 @@ class Main_window(QDialog):
 			self.ui.lbl_error.show()
 		else:
 			self.ui.lbl_error.hide()
-			print "Open other window..."
 			self.logged_in_w = logged_in_window(self)
 			self.logged_in_w.user_file = file
 			self.logged_in_w.user_passwd = user_passwd
