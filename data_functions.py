@@ -3,6 +3,7 @@ import hashlib
 import inspect
 import codecs
 import linecache
+import os
 from Crypto.Cipher import AES
 
 
@@ -119,6 +120,94 @@ def get_username_and_passwd(user_file, srv_index, cipher):
 	passwd = decrypt_fn(cipher, line_passwd)
 
 	return username, passwd
+
+def user_name_exist(username):
+	if debbug:
+		print_current_fn()
+		print username
+
+	user_hash = hash_fn(username)
+	with open(file_users) as f:
+		line = f.readline()
+		found = False
+		while(True):
+			if not line:
+				break
+			user_n = line.split(",")[1]
+			if user_n == user_hash:
+				found = True
+				break
+			line = f.readline()
+
+
+	return found
+
+def valid_password(username, passwd):
+	if debbug:
+		print_current_fn()
+		print "username:", username
+		print "passwd:", passwd
+
+	user_hash = hash_fn(username)
+	passwd_hash = hash_fn(passwd)
+	with open(file_users) as f:
+		line = f.readline()
+		found = False
+		while(True):
+			if not line:
+				break
+			user_n = line.split(",")[1]
+			pass_n = line.split(",")[2]
+			if user_n == user_hash and passwd_hash == pass_n:
+				found = True
+				break
+			line = f.readline()
+
+
+	return found
+
+def add_new_user(username, passwd):
+	file = open(file_users, "r")
+	linelist = file.readlines()
+	file.close()
+	num_new_user = int(linelist[-1].split(",")[0]) + 1
+	username_hash = hash_fn(username)
+	passwd_hash = hash_fn(passwd)
+	new_line = "\n" + str(num_new_user) + "," + username_hash + "," + passwd_hash + ","
+	file_append = open(file_users, 'a')
+	file_append.write(new_line)
+	file_append.close()
+	new_file = open(data_dir + username_hash, "w+")
+	new_file.close()
+
+def delete_user(username):
+	if debbug:
+		print_current_fn()
+		print "username:", username
+
+	user_hash = hash_fn(username)
+	file = open(file_users, "r")
+	linelist = file.readlines()
+	file.close()
+
+	file_write = open(file_users, "w")
+	for line in linelist:
+		if line.split(",")[1] == user_hash:
+			pass
+		else:
+			file_write.write(line)
+	os.remove(data_dir + user_hash)
+	# with open(file_users, 'r+') as f:
+	# 	line = f.readline()
+	# 	found = False
+	# 	while(True):
+	# 		if not line:
+	# 			break
+	# 		user_n = line.split(",")[1]
+	# 		if user_n == user_hash:
+	# 			found = True
+	# 			break
+	# 		line = f.readline()
 
 
 def dummy():

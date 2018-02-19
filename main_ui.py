@@ -25,9 +25,9 @@ except AttributeError:
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
-        Form.resize(400, 286)
+        Form.resize(400, 280)
         self.btn_exit = QtGui.QPushButton(Form)
-        self.btn_exit.setGeometry(QtCore.QRect(150, 250, 90, 28))
+        self.btn_exit.setGeometry(QtCore.QRect(150, 240, 90, 28))
         self.btn_exit.setObjectName(_fromUtf8("btn_exit"))
         self.txt_passwd = QtGui.QLineEdit(Form)
         self.txt_passwd.setGeometry(QtCore.QRect(110, 130, 191, 32))
@@ -41,13 +41,13 @@ class Ui_Form(object):
         self.label_2.setGeometry(QtCore.QRect(110, 110, 91, 20))
         self.label_2.setObjectName(_fromUtf8("label_2"))
         self.btn_login = QtGui.QPushButton(Form)
-        self.btn_login.setGeometry(QtCore.QRect(150, 190, 90, 28))
+        self.btn_login.setGeometry(QtCore.QRect(150, 180, 90, 28))
         self.btn_login.setObjectName(_fromUtf8("btn_login"))
         self.txt_user = QtGui.QLineEdit(Form)
         self.txt_user.setGeometry(QtCore.QRect(110, 70, 191, 32))
         self.txt_user.setObjectName(_fromUtf8("txt_user"))
         self.btn_new_user = QtGui.QPushButton(Form)
-        self.btn_new_user.setGeometry(QtCore.QRect(150, 220, 90, 28))
+        self.btn_new_user.setGeometry(QtCore.QRect(100, 210, 90, 28))
         self.btn_new_user.setObjectName(_fromUtf8("btn_new_user"))
         self.lbl_error = QtGui.QLabel(Form)
         self.lbl_error.setGeometry(QtCore.QRect(110, 160, 191, 20))
@@ -55,6 +55,9 @@ class Ui_Form(object):
         self.lbl_title_2 = QtGui.QLabel(Form)
         self.lbl_title_2.setGeometry(QtCore.QRect(10, 10, 401, 31))
         self.lbl_title_2.setObjectName(_fromUtf8("lbl_title_2"))
+        self.btn_del_user = QtGui.QPushButton(Form)
+        self.btn_del_user.setGeometry(QtCore.QRect(200, 210, 90, 28))
+        self.btn_del_user.setObjectName(_fromUtf8("btn_del_user"))
 
         self.retranslateUi(Form)
         QtCore.QObject.connect(self.btn_exit, QtCore.SIGNAL(_fromUtf8("clicked()")), Form.close)
@@ -73,4 +76,5 @@ class Ui_Form(object):
         self.btn_new_user.setText(_translate("Form", "New User", None))
         self.lbl_error.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ff0000;\">Wrong user or password</span></p></body></html>", None))
         self.lbl_title_2.setText(_translate("Form", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600;\">Enter Username and Password</span></p></body></html>", None))
+        self.btn_del_user.setText(_translate("Form", "Delete User", None))
 
