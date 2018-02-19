@@ -278,6 +278,39 @@ def add_new_service(user_file, cipher, new_srv, new_user, new_passwd):
 	file_append.write(new_line)
 	file_append.close()
 
+def delete_service(user_file, cipher, service):
+	if debbug:
+		print_current_fn()
+		print "service:", service
+
+	srv_enc = encrypt_fn(cipher, service)
+	file = open(user_file, "r")
+	linelist = file.readlines()
+	file.close()
+
+	file_write = open(user_file, "w")
+	line_num = 0;
+	new_line = ""
+	dont_print = False
+	for line in linelist:
+		print "line", line.splitlines()[0]
+		print "srv_enc", srv_enc
+		if line.splitlines()[0] == srv_enc:
+			dont_print = True
+
+		new_line += line.splitlines()[0]
+		if line_num % 4 == 3 and not dont_print:
+			file_write.write(new_line)
+			dont_print = False
+			new_line = "\n"
+		elif line_num % 4 == 3 and dont_print:
+			dont_print = False
+			new_line = "\n"
+		else:
+			new_line += "\n"
+		line_num += 1
+
+	file_write.close()
 def dummy():
 	print "Dummy function called :)"
 

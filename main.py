@@ -112,7 +112,12 @@ class logged_in_window(QDialog):
 		self.ui.btn_gen_passwd.hide()
 		self.ui.btn_save_new_service.clicked.connect(self.btn_save_new_service_clicked)
 		self.ui.lbl_new_srv_error.hide()
-		# self.ui.btn_erase.clicked.connect(self)
+		self.ui.btn_erase.clicked.connect(self.btn_erase_clicked)
+		self.ui.lbl_erase_sure.hide()
+		self.ui.btn_erase_no.hide()
+		self.ui.btn_erase_yes.hide()
+		self.ui.btn_erase_no.clicked.connect(self.btn_erase_no_clicked)
+		self.ui.btn_erase_yes.clicked.connect(self.btn_erase_yes_clicked)
 
 	def create_user_cipher(self):
 		self.cipher = df.create_cypher_fn(self.user_passwd)
@@ -145,7 +150,9 @@ class logged_in_window(QDialog):
 		self.ui.btn_add_new_service.hide()
 		self.ui.btn_gen_passwd.show()
 		self.ui.lbl_new_srv_error.hide()
-		
+		self.ui.lbl_erase_sure.hide()
+		self.ui.btn_erase_no.hide()
+		self.ui.btn_erase_yes.hide()
 
 
 	def btn_cancel_new_service_clicked(self, parent):
@@ -161,6 +168,9 @@ class logged_in_window(QDialog):
 		self.ui.btn_add_new_service.show()
 		self.ui.btn_gen_passwd.hide()
 		self.ui.lbl_new_srv_error.hide()
+		self.ui.lbl_erase_sure.hide()
+		self.ui.btn_erase_no.hide()
+		self.ui.btn_erase_yes.hide()
 
 	def btn_gen_passwd_clicked(self, parent):
 		new_pass = df.gen_new_passwd()
@@ -194,7 +204,53 @@ class logged_in_window(QDialog):
 				services = df.get_user_services(self.user_file, self.cipher)
 				self.ui.cbox_service.clear()
 				self.ui.cbox_service.addItems(services)
+				self.ui.lbl_erase_sure.hide()
+				self.ui.btn_erase_no.hide()
+				self.ui.btn_erase_yes.hide()
 		
+	def btn_erase_clicked(self, parent):
+		self.ui.lbl_erase_sure.show()
+		self.ui.btn_erase_no.show()
+		self.ui.btn_erase_yes.show()
+	def btn_erase_no_clicked(self, parent):
+		self.ui.cbox_service.show()
+		self.ui.txt_new_service.hide()
+		self.ui.txt_new_service.setEnabled(False)
+		self.ui.txt_username.setEnabled(False)
+		self.ui.txt_passwd.setEnabled(False)
+		self.ui.lbl_title_new_srv.hide()
+		self.ui.lbl_title.show()
+		self.ui.btn_save_new_service.setEnabled(False)
+		self.ui.btn_cancel_new_service.hide()
+		self.ui.btn_add_new_service.show()
+		self.ui.btn_gen_passwd.hide()
+		self.ui.lbl_new_srv_error.hide()
+		self.ui.lbl_erase_sure.hide()
+		self.ui.btn_erase_no.hide()
+		self.ui.btn_erase_yes.hide()
+
+	def btn_erase_yes_clicked(self, parent):
+		service = str(self.ui.cbox_service.currentText())
+		df.delete_service(self.user_file, self.cipher, service)
+		services = df.get_user_services(self.user_file, self.cipher)
+		self.ui.cbox_service.clear()
+		self.ui.cbox_service.addItems(services)
+		self.ui.cbox_service.show()
+		self.ui.txt_new_service.hide()
+		self.ui.txt_new_service.setEnabled(False)
+		self.ui.txt_username.setEnabled(False)
+		self.ui.txt_passwd.setEnabled(False)
+		self.ui.lbl_title_new_srv.hide()
+		self.ui.lbl_title.show()
+		self.ui.btn_save_new_service.setEnabled(False)
+		self.ui.btn_cancel_new_service.hide()
+		self.ui.btn_add_new_service.show()
+		self.ui.btn_gen_passwd.hide()
+		self.ui.lbl_new_srv_error.hide()
+		self.ui.lbl_erase_sure.hide()
+		self.ui.btn_erase_no.hide()
+		self.ui.btn_erase_yes.hide()
+
 class Main_window(QDialog):
 	def __init__(self, parent = None):
 		QWidget.__init__(self, parent)

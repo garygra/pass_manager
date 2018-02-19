@@ -25,7 +25,7 @@ except AttributeError:
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
-        Form.resize(403, 339)
+        Form.resize(403, 391)
         self.cbox_service = QtGui.QComboBox(Form)
         self.cbox_service.setGeometry(QtCore.QRect(10, 80, 381, 30))
         self.cbox_service.setObjectName(_fromUtf8("cbox_service"))
@@ -79,6 +79,15 @@ class Ui_Form(object):
         self.lbl_new_srv_error = QtGui.QLabel(Form)
         self.lbl_new_srv_error.setGeometry(QtCore.QRect(70, 60, 141, 20))
         self.lbl_new_srv_error.setObjectName(_fromUtf8("lbl_new_srv_error"))
+        self.btn_erase_yes = QtGui.QPushButton(Form)
+        self.btn_erase_yes.setGeometry(QtCore.QRect(40, 350, 101, 28))
+        self.btn_erase_yes.setObjectName(_fromUtf8("btn_erase_yes"))
+        self.btn_erase_no = QtGui.QPushButton(Form)
+        self.btn_erase_no.setGeometry(QtCore.QRect(259, 350, 101, 28))
+        self.btn_erase_no.setObjectName(_fromUtf8("btn_erase_no"))
+        self.lbl_erase_sure = QtGui.QLabel(Form)
+        self.lbl_erase_sure.setGeometry(QtCore.QRect(120, 330, 171, 20))
+        self.lbl_erase_sure.setObjectName(_fromUtf8("lbl_erase_sure"))
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -106,4 +115,7 @@ class Ui_Form(object):
         self.btn_cancel_new_service.setText(_translate("Form", "Cancel New Service", None))
         self.btn_gen_passwd.setText(_translate("Form", "Generate Random Password", None))
         self.lbl_new_srv_error.setText(_translate("Form", "<html><head/><body><p><span style=\" color:#ff0000;\">Service already exist</span></p></body></html>", None))
+        self.btn_erase_yes.setText(_translate("Form", "Erase Service!", None))
+        self.btn_erase_no.setText(_translate("Form", "Dont Erase!", None))
+        self.lbl_erase_sure.setText(_translate("Form", "<html><head/><body><p><span style=\" font-weight:600; color:#ff5500;\">Sure To Erease Service?</span></p></body></html>", None))
 
