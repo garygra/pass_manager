@@ -108,13 +108,15 @@ def decrypt_fn(cipher, data):
 	return serv
 
 def get_username_and_passwd(user_file, srv_index, cipher):
-	line = linecache.getline(user_file, srv_index) #.split(",")
+	line_username = linecache.getline(user_file, 2 + 4 * srv_index).splitlines()[0] #.split(",")
+	line_passwd = linecache.getline(user_file, 3 + 4 * srv_index).splitlines()[0] #.split(",")
 	if debbug:
 		print_current_fn()
-		print line
-		print "passwd:", line[2]
-	username = decrypt_fn(cipher, line[2])
-	passwd = decrypt_fn(cipher, line[3])
+		print "srv_index:", srv_index
+		print "line_username:", line_username
+		print "line_passwd:", line_passwd
+	username = decrypt_fn(cipher, line_username)
+	passwd = decrypt_fn(cipher, line_passwd)
 
 
 	return username, passwd

@@ -32,7 +32,7 @@ class logged_in_window(QDialog):
 		
 
 	def btn_show_clicked(self, parent):
-		srv_index = self.ui.cbox_service.currentIndex() + 1
+		srv_index = self.ui.cbox_service.currentIndex() 
 		username_srv_index, passwd_srv_index = df.get_username_and_passwd(self.user_file, srv_index, self.cipher)
 		self.ui.txt_username.setText(username_srv_index)
 		self.ui.txt_passwd.setText(passwd_srv_index)
